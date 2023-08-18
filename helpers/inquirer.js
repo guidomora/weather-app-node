@@ -69,14 +69,14 @@ const leerInput = async (message) => {
   return desc
 };
 
-const listadoTareasABorrar = async (tareas = []) => { //menu para seleccionar tareas a borrar
+const listPlaces = async (places = []) => { //listamos los lugares
   
-  const choices = tareas.map((tarea ,i) => { //las opciones
+  const choices = places.map((place ,i) => { //las opciones
 
-    const indice = `${i + 1}.`.green
+    const idx = `${i + 1}.`.green
     return {
-      value: tarea.id, // obtenemos el id cuando seleccionemos
-      name: `${indice} ${tarea.desc}` 
+      value: place.id, // obtenemos el id cuando seleccionemos
+      name: `${idx} ${place.name}` 
     }
   })
 
@@ -89,7 +89,7 @@ const listadoTareasABorrar = async (tareas = []) => { //menu para seleccionar ta
     {
       type: "list",
       name: "id",
-      message: 'Delete',
+      message: 'Select place',
       choices
     }
   ]
@@ -135,7 +135,7 @@ export {
   inquireMenu,
   pause,
   leerInput,
-  listadoTareasABorrar,
+  listPlaces,
   confirmar,
   mostrarListadoCheckList
 };
