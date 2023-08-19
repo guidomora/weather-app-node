@@ -1,12 +1,15 @@
+import fs from "fs"
 import axios from "axios";
 import "dotenv/config";
 
 class Searches {
-  history = ["Barcelona", "Buenos aires", "Miami"];
+  history = [];
+  dbpath = './db/database.json'
 
   constructor() {
-    // leer la db
+    this.readDB()
   }
+
 
   get paramsMapBox() {
     return {
@@ -23,6 +26,7 @@ class Searches {
       units: 'metric'
     }
   }
+
 
   async city(place = "") {
     try {
@@ -60,8 +64,35 @@ class Searches {
         temp: main.temp
       }
     } catch (error) {
-      return [];
+      console.log(error);
     }
+    
+  }
+
+  addHistory(place = ''){
+    if (this.history.includes(place.toLocaleLowerCase())) { // si el lugar ya existe 
+      return // no se agrega
+    } 
+    this.history.unshift(place.toLocaleLowerCase()) //agrega al principio del array
+
+    this.saveInDb()
+  }
+
+  saveInDb(){
+    const payload = {
+      history: this.history
+    }
+
+    fs.writeFileSync(this.dbpath, JSON.stringify(payload))
+  }
+
+  readDB(){
+    if (!fs.existsSync(this.dbpath)) {
+      return null
+    }
+    const info = fs.readFileSync(this.dbpath, {encoding: 'utf-8'})
+    const data = JSON.parse(info)
+    this.history = data.history
   }
 }
 

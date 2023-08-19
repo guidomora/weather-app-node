@@ -19,8 +19,11 @@ const main = async () => {
         const searchTerm = await leerInput("City: "); // input
         const places = await searches.city(searchTerm); // busqueda
         const id = await listPlaces(places); // lista de lugares
+        if (id === "0") continue; // si es 0 el ciclo continua
         const placeSelected = places.find((l) => l.id === id); // de la lista se obtiene el lugar seleccionado
-        const weather = await searches.weatherFromPlace( // obtenemos el clima pasando la lat y long
+        searches.addHistory(placeSelected.name); // sl confirmar el lugar se agrega a la lista
+        const weather = await searches.weatherFromPlace(
+          // obtenemos el clima pasando la lat y long
           placeSelected.lat,
           placeSelected.lng
         );
@@ -36,6 +39,10 @@ const main = async () => {
         break;
 
       case 2:
+        searches.history.forEach((place, i) => {
+          const idx = `${i + 1}`.green
+          console.log(`${idx} ${place}`);
+        })
         break;
 
       case 0:
